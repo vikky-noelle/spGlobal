@@ -1,0 +1,50 @@
+{
+  "name": "backend-service",
+  "version": "1.0.0",
+  "description": "Backend service for website",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "1gf",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/mongoose": "^5.11.97",
+    "@types/morgan": "^1.9.9",
+    "@types/multer": "^1.4.11",
+    "@types/node": "^18.0.0",
+    "@types/sequelize": "^4.28.13",
+    "@types/sqlite3": "^3.1.8",
+    "@types/uuid": "^8.3.4",
+    "mongoose": "^8.4.1",
+    "prisma": "^5.12.1",
+    "sequelize-auto-migrations": "^1.0.3",
+    "sequelize-cli": "^6.6.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.12.1",
+    "axios": "^0.27.2",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.1",
+    "express-validator": "^7.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "object-to-xml": "^2.0.0",
+    "sequelize": "^6.21.2",
+    "socket.io": "^4.7.4",
+    "sqlite3": "^5.0.8",
+    "uuid": "^8.3.2",
+    "xmlbuilder": "^15.1.1"
+  }
+}

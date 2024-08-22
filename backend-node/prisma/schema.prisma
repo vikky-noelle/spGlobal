@@ -1,0 +1,130 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int            @id @default(autoincrement())
+  username     String         @unique
+  email        String         @unique
+  password     String
+  createdAt    DateTime       @default(now())
+  Creator      Creator[]
+  Comment      Comment[]
+  WatchLater   WatchLater[]
+  Subscription Subscription[]
+  WatchHistory WatchHistory[]
+  Playlists    Playlist[]
+  VideoLike    VideoLike[]
+}
+
+model Creator {
+  id                 Int     @id @default(autoincrement())
+  name               String
+  profilePicture     String?
+  channelDescription String?
+  subscriberCount    Int     @default(0)
+
+  videos       Video[]
+  user         User           @relation(fields: [userId], references: [id])
+  userId       Int            @unique
+  Subscription Subscription[]
+}
+
+model Video {
+  id           Int       @id @default(autoincrement())
+  title        String
+  description  String
+  url          String
+  thumbnailUrl String
+  uploadDate   DateTime  @default(now())
+  visibility   String
+  keywords     String[]
+  viewsCount   Int       @default(0) // Track the number of views
+  likesCount   Int       @default(0) // Track the number of likes
+  comments     Comment[] // One-to-many relation with comments
+  createdAt    DateTime  @default(now()) // Timestamp when the video was created
+  updatedAt    DateTime  @updatedAt // Timestamp when the video was last updated
+
+  creator      Creator        @relation(fields: [creatorId], references: [id])
+  creatorId    Int
+  WatchLater   WatchLater[]
+  WatchHistory WatchHistory[]
+  playlists    Playlist[]     @relation("PlaylistVideos")
+  VideoLike    VideoLike[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  video   Video @relation(fields: [videoId], references: [id])
+  videoId Int
+}
+
+model WatchLater {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  video     Video    @relation(fields: [videoId], references: [id])
+  videoId   Int
+  createdAt DateTime @default(now())
+}
+
+model Subscription {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  creatorId Int
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id])
+  creator Creator @relation(fields: [creatorId], references: [id])
+
+  @@unique([userId, creatorId])
+}
+
+model WatchHistory {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  videoId   Int
+  watchedAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id])
+  video Video @relation(fields: [videoId], references: [id])
+}
+
+model Playlist {
+  id        Int      @id @default(autoincrement())
+  name      String
+  userId    Int
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+
+  videos Video[] @relation("PlaylistVideos")
+}
+
+model VideoLike {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  videoId   Int
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id])
+  video Video @relation(fields: [videoId], references: [id])
+
+  @@unique([userId, videoId])
+}
